@@ -1,6 +1,6 @@
 import time
 from datetime import datetime, timedelta
-from typing import Tuple
+from typing import Tuple, Union
 
 import pandas as pd
 from selenium import webdriver
@@ -45,7 +45,9 @@ FIELD_CSS_SELECTORS = {
 
 
 def get_element(
-    driver: webdriver.Firefox, css_selector: str, timeout: int = TIMEOUT
+    driver: Union[webdriver.Chrome, webdriver.Firefox],
+    css_selector: str,
+    timeout: int = TIMEOUT,
 ) -> WebElement:
     element = WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, css_selector))
@@ -54,7 +56,9 @@ def get_element(
 
 
 def get_elements(
-    driver: webdriver.Firefox, css_selector: str, timeout: int = TIMEOUT
+    driver: Union[webdriver.Chrome, webdriver.Firefox],
+    css_selector: str,
+    timeout: int = TIMEOUT,
 ) -> list[WebElement]:
     elements = WebDriverWait(driver, timeout).until(
         EC.presence_of_all_elements_located((By.CSS_SELECTOR, css_selector))
@@ -63,14 +67,18 @@ def get_elements(
 
 
 def get_element_texts(
-    driver: webdriver.Firefox, css_selector: str, timeout: int = TIMEOUT
+    driver: Union[webdriver.Chrome, webdriver.Firefox],
+    css_selector: str,
+    timeout: int = TIMEOUT,
 ) -> list[str]:
     elements = get_elements(driver, css_selector, timeout)
     return [element.text for element in elements]
 
 
 def click_element(
-    driver: webdriver.Firefox, css_selector: str, timeout: int = TIMEOUT
+    driver: Union[webdriver.Chrome, webdriver.Firefox],
+    css_selector: str,
+    timeout: int = TIMEOUT,
 ) -> None:
     element = WebDriverWait(driver, timeout).until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, css_selector))
@@ -88,7 +96,7 @@ def get_name(
 
 def format_exp_date(date_str: str):
     if "demain" in date_str:
-        return datetime.now() + timedelta(days=1)
+        return datetime.now().date() + timedelta(days=1)
     if "aujourd'hui" in date_str:
         return datetime.now().date()
     date_str = date_str.split("\n: ")[1]
@@ -105,7 +113,7 @@ def format_exp_date(date_str: str):
 
 
 def get_code_str(
-    driver: webdriver.Firefox,
+    driver: Union[webdriver.Chrome, webdriver.Firefox],
     see_code_button: WebElement,
     timeout: int = TIMEOUT,
 ) -> str:
@@ -137,7 +145,9 @@ def get_code_str(
 
 
 class VoucherScraper:
-    def __init__(self, driver: webdriver.Firefox, url: str):
+    def __init__(
+        self, driver: Union[webdriver.Chrome, webdriver.Firefox], url: str
+    ):
         self.driver = driver
         self.url = url
         self.data: dict = {}

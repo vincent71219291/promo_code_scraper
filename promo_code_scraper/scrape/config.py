@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class ScrapeConfig:
+    browser: str
     url: str
     data_dir: str
     new_discount_alert: bool

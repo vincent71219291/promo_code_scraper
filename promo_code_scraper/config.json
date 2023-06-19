@@ -1,6 +1,7 @@
 {
+    "browser": "Firefox",
     "url": "https://www.radins.com/code-promo/myprotein/",
-    "data_dir": "./data",
+    "data_dir": "../data",
     "new_discount_alert": true,
     "min_discount": 20,
     "env_var_user": "EMAIL_USER",
